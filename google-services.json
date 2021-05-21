@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "496877536042",
+    "project_id": "easy-delivery-307504",
+    "storage_bucket": "easy-delivery-307504.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:496877536042:android:22a0797b0260131ff09453",
+        "android_client_info": {
+          "package_name": "com.quest.easydelivery"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "496877536042-kdgakddqh1leogqrc9rnb3bathq68ckc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKmOi3YILM1AdQUnuZprvHwey38tT0uac"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "496877536042-kdgakddqh1leogqrc9rnb3bathq68ckc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
