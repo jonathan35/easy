@@ -7,6 +7,7 @@ import myStyle from "../assets/Style";
 import MapView, { Marker } from 'react-native-maps';
 import { ImagePickLibrary, fileUploading } from './ImageComponent';
 import GlobalVar from '../routes/GlobalVar';
+import { PushToken } from './PushToken';
 
 
 
@@ -36,6 +37,8 @@ export const OrderScreen = ({ route, navigation }) => {
     data.append('uid', state.user.id)
     data.append('action', action)
 
+    
+
     try {
       let response = await fetch('https://mingmingtravel.com/easyapi/api/update_order.php', {
         method: 'post',
@@ -47,6 +50,7 @@ export const OrderScreen = ({ route, navigation }) => {
         .then((response) => response.json())
         .then((json) => {
           setLoading(false);
+          
           if (action == 'accept') {
             setStatus('Accepted');
           } else if (action == 'collect') {
@@ -140,7 +144,7 @@ export const OrderScreen = ({ route, navigation }) => {
       ) : (
         order.status && (
         <ScrollView style={{flex:1, width:'100%'}}>
-
+          <PushToken />
           <LinearGradient
             style={{ paddingVertical: 10, justifyContent: 'center' }}
             colors={["rgba(255, 255, 255, 1)", "rgba(211, 211, 211, 1)"]}>
@@ -156,7 +160,16 @@ export const OrderScreen = ({ route, navigation }) => {
 
               
           <View>
-              
+            
+            <TouchableOpacity
+              style={[myStyle.button]}
+              onPress={() => {updateOrderApi('pod')}}>
+              <Text style={myStyle.buttonText}>CONFIRM WITHOUT POD</Text>
+            </TouchableOpacity>
+         
+                
+
+
             {order.branch_name && (
               <View style={styles.block}>
                 <Text style={styles.FontL}>{order.branch_name}</Text>
@@ -301,7 +314,7 @@ export const OrderScreen = ({ route, navigation }) => {
               <View style={myStyle.inputBlock}>
                 <TouchableOpacity
                   style={myStyle.button}
-                  onPress={() => {updateOrderApi('accpet')}}
+                  onPress={() => {updateOrderApi('accept')}}
                 ><Text style={myStyle.buttonText}>ACCEPT ORDER</Text></TouchableOpacity>
               </View>
               
@@ -332,8 +345,7 @@ export const OrderScreen = ({ route, navigation }) => {
             ) : (
               <View></View>
             )}
-            
-         
+
             
           </View>
             

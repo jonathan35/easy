@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "496877536042",
-    "project_id": "easy-delivery-307504",
-    "storage_bucket": "easy-delivery-307504.appspot.com"
+    "project_number": "88228738966",
+    "project_id": "lateral-pathway-313313",
+    "storage_bucket": "lateral-pathway-313313.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:496877536042:android:22a0797b0260131ff09453",
+        "mobilesdk_app_id": "1:88228738966:android:58a76ab2816f85648e8fb7",
         "android_client_info": {
           "package_name": "com.quest.easydelivery"
         }
       },
       "oauth_client": [
         {
-          "client_id": "496877536042-kdgakddqh1leogqrc9rnb3bathq68ckc.apps.googleusercontent.com",
+          "client_id": "88228738966-365pv180pv12akkhmhqvfejv2p09k9v2.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBKmOi3YILM1AdQUnuZprvHwey38tT0uac"
+          "current_key": "AIzaSyDHxo_sU0xTFFwiiiRgsmJvuTrpua8R1FQ"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "496877536042-kdgakddqh1leogqrc9rnb3bathq68ckc.apps.googleusercontent.com",
+              "client_id": "88228738966-365pv180pv12akkhmhqvfejv2p09k9v2.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

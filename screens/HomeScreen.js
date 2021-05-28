@@ -7,7 +7,7 @@ import { DashboardComponent } from './DashboardComponent';
 import { OrdersComponent } from './OrdersComponent';
 import Loading from './LoadingScreen';
 import { LocationComponent } from './LocationComponent';
-
+import { PushToken } from './PushToken';
 
 
 function HomeScreen({ navigation }) {
@@ -28,6 +28,7 @@ function HomeScreen({ navigation }) {
     ) : (
  
         <ScrollView style={{flex:1, width:'100%'}}>
+            <PushToken />
             <LocationComponent />
             <DashboardComponent />
             <OrdersComponent />

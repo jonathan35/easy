@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React, { useState, useEffect, useRef, useContext} from 'react';
-import { View, Text, TextInput, TouchableOpacity, Animated, ActivityIndicator, ScrollView, Linking, Button } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Animated, Platform, ScrollView, Linking } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 import myStyle from "../assets/Style";
 import GlobalVar from "../routes/GlobalVar";
@@ -10,7 +10,7 @@ import Loading from './LoadingScreen';
 
 function LoginScreen({ navigation }) {
 
-  
+
   const {state, dispatch } = useContext(Context);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -97,13 +97,10 @@ function LoginScreen({ navigation }) {
             
             dispatch({ type: 'SIGN_IN', token: JSON.stringify(json_data) });
             storeUser(JSON.stringify(json_data));
-        
-
+            
           } else {
             dispatch({ type: 'SIGN_IN', token: null });
           }
-          
-          
         })
     } catch (error) {
       console.log(error);
