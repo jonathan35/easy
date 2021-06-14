@@ -8,7 +8,7 @@ import MapView, { Marker } from 'react-native-maps';
 import { ImagePickLibrary, fileUploading } from './ImageComponent';
 import GlobalVar from '../routes/GlobalVar';
 import { PushToken } from './PushToken';
-
+import { useFocusEffect } from '@react-navigation/native';
 
 
 
@@ -19,6 +19,9 @@ export const OrderScreen = ({ route, navigation }) => {
   const [status, setStatus] = useState('');//Accepted Collected Delivering Delivered
   const [isLoading, setLoading] = useState(true);
   const fadeBack = useRef(new Animated.Value(0)).current;
+  const [reported, setReported] = useState(false);
+  const [declined, setDeclined] = useState(false);
+  const [distance, setDistance] = useState(10);
   const oid = route.params.oid;
   
   //---------- MAP -------------
@@ -37,8 +40,6 @@ export const OrderScreen = ({ route, navigation }) => {
     data.append('uid', state.user.id)
     data.append('action', action)
 
-    
-
     try {
       let response = await fetch('https://mingmingtravel.com/easyapi/api/update_order.php', {
         method: 'post',
@@ -51,7 +52,9 @@ export const OrderScreen = ({ route, navigation }) => {
         .then((json) => {
           setLoading(false);
           
-          if (action == 'accept') {
+          if (action == 'report') {
+            setStatus('Accepted');
+          } else if (action == 'accept') {
             setStatus('Accepted');
           } else if (action == 'collect') {
             setStatus('Collected');
@@ -70,7 +73,41 @@ export const OrderScreen = ({ route, navigation }) => {
   }
 
 
+  function checkDistance(){
+    if (status == 'Accepted') {
+      let location = state.driverLocation;      
+      let driver_lat = location.coords.latitude;
+      let driver_lng = location.coords.longitude;
+      let dis = 4;
 
+      if(driver_lat>0 && driver_lng>0){
+        
+        let order_lat = order.o_lat;
+        let order_lng = order.o_lon;
+
+        if (order_lat > 0 && order_lng > 0) {
+          //alert("🔐 \n" + status + '\n dri lat: ' + driver_lat + 'dri lon' + driver_lng + '\n order lat: ' + order_lat + 'order lon' + order_lng);
+      
+          let degree = Math.abs(order_lat - driver_lat) + Math.abs(order_lng - driver_lng);
+          
+          if (degree > 0) {
+            let dis = Math.round(degree * 111);//1 degree about 111km
+            setDistance(dis);
+          }
+        }
+      }
+    }
+  }
+
+  useEffect(() => {
+    let myInterval = setInterval(() => {
+      if (state.user.id) {
+        checkDistance();
+      }
+    }, 20000);//20 sec
+  }, []);
+
+  
   useEffect(() => {
     const getOrderApi = async () => {
 
@@ -160,13 +197,13 @@ export const OrderScreen = ({ route, navigation }) => {
 
               
           <View>
-            
+          
             <TouchableOpacity
               style={[myStyle.button]}
               onPress={() => {updateOrderApi('pod')}}>
-              <Text style={myStyle.buttonText}>CONFIRM WITHOUT POD</Text>
+              <Text style={myStyle.buttonText}>FORCE POD</Text>
             </TouchableOpacity>
-         
+          {/**/}
                 
 
 
@@ -310,25 +347,32 @@ export const OrderScreen = ({ route, navigation }) => {
             
             
             {status == 'Ordered' ? (
-              
               <View style={myStyle.inputBlock}>
                 <TouchableOpacity
                   style={myStyle.button}
                   onPress={() => {updateOrderApi('accept')}}
                 ><Text style={myStyle.buttonText}>ACCEPT ORDER</Text></TouchableOpacity>
               </View>
-              
             ) : status == 'Accepted' ? (
-              
-              <View style={myStyle.inputBlock}>
-                <TouchableOpacity
-                  style={myStyle.button}
-                  onPress={() => {updateOrderApi('collect')}}
-                ><Text style={myStyle.buttonText}>COLLECTED GOODS</Text></TouchableOpacity>
+              distance <= 3 ? (
+                <View style={myStyle.inputBlock}>
+                  <TouchableOpacity
+                    style={myStyle.button}
+                    onPress={() => {updateOrderApi('collect')}}
+                  ><Text style={myStyle.buttonText}>COLLECTED GOODS</Text></TouchableOpacity>
+                </View>
+              ) : (
+                <View style={[myStyle.inputBlock, {paddingTop: 10}]}>
+                <Text style={{ textAlign: 'left', padding: 5 }}>
+                  <Image 
+                    style={{ resizeMode: "contain", padding: 2}}
+                    source={require('../assets/images/checked-24.png')}/>
+                  <Text> </Text>
+                  EST. {distance}KM AWAY FROM GOODS COLLECTION.
+                </Text>
               </View>
-              
+              )
             ) : status == 'Collected' ? (
-              
               <View style={myStyle.inputBlock}>
                 <View style={{height: 20}}></View>
                 <ImagePickLibrary style={myStyle.button} store_target='SET_POD' />
@@ -341,16 +385,59 @@ export const OrderScreen = ({ route, navigation }) => {
                 </TouchableOpacity>
                 )}
               </View>
-  
             ) : (
               <View></View>
             )}
-
             
+            {order.report == 'no internet' || reported ? (
+              <View style={[myStyle.inputBlock, {paddingTop: 10}]}>
+                <Text style={{ textAlign: 'left', padding: 5 }}>
+                  <Image 
+                    style={{ resizeMode: "contain", padding: 2}}
+                    source={require('../assets/images/checked-24.png')}/>
+                  <Text> </Text>
+                  NO INTERNET DURING COLLECTION.
+                </Text>
+              </View>
+            ) : status != 'Ordered' ? (
+              <View style={[myStyle.inputBlock, {paddingTop: 40}]}>
+                <TouchableOpacity
+                  style={[myStyle.button2]}
+                  onPress={() => {updateOrderApi('report'), setReported(true)}}>
+                  <Text style={myStyle.buttonText2}>REPORT NO INTERNET</Text>
+                </TouchableOpacity>
+                <Text style={{ color: 'gray', textAlign: 'center', padding: 5 }}>
+                  Report no internet connection during goods collection to prevent slow pick demerit.
+                </Text>
+              </View>
+            ) : (
+              <View></View>
+            )}
+            
+            {order.decline == state.user.id || declined ? (
+              <View style={[myStyle.inputBlock, {paddingTop: 40}]}>
+                <Text style={{ textAlign: 'center', padding: 5 }}>
+                  DECLINED ASSIGNMENT
+                </Text>
+              </View>
+            ) : (status == 'Ordered' && order.assign) && (
+              <View style={[myStyle.inputBlock, {paddingTop: 40}]}>
+                <TouchableOpacity
+                  style={[myStyle.button2]}
+                  onPress={() => {updateOrderApi('decline'), setDeclined(true)}}>
+                  <Text style={myStyle.buttonText2}>DECLINE ASSIGNMENT</Text>
+                </TouchableOpacity>
+                <Text style={{ color: 'gray', textAlign: 'center', padding: 5 }}>
+                  Decline order from admin assignment
+                </Text>
+              </View>
+            )}
+     
+
           </View>
             
           <View style={{ height: 100, paddingTop: 40 }}>
-            <Text style={{ textAlign: 'center', color: '#666' }}>--------- END ---------</Text>
+                <Text style={{ textAlign: 'center', color: '#666' }}>--------- END ---------</Text>
           </View>
 
         </ScrollView>

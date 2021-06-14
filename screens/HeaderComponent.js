@@ -12,21 +12,67 @@ function HeaderComponent({ title }) {
   const { state, dispatch } = useContext(Context);
   const [menuModalVisible, setMenuModalVisible] = useState(false);
 
-
+  
   return (
     <View>
       <View style={styles.header}>
-        <TouchableOpacity
-        style={styles.burger}
+        {/*<TouchableOpacity
+          style={styles.burger}
           onPress={() => setMenuModalVisible(!menuModalVisible)}>
               <Image
               style={{resizeMode: "contain"}}
               source={require('../assets/images/menudot-28.png')}
               />
         </TouchableOpacity>
-        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.title}>{title}</Text> */}
+
+        {state.userToken && (
+
+          <View style={{ flex: 9, flexDirection: 'row'}}>
+            
+            <TouchableOpacity
+              onPress={() => navigation.navigate('Home')}
+              style={styles.headerCol}>
+              <Image
+                style={{ resizeMode: "contain", top:3 }}
+                source={require('../assets/images/home-20.png')} />
+            </TouchableOpacity>
+    
+            <TouchableOpacity
+              onPress={() => navigation.navigate('OrdersStatement')}
+              style={styles.headerCol}>
+              <Image
+                style={{ resizeMode: "contain", top: 4 }}
+                source={require('../assets/images/list-20.png')} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('CommissionStatement')}
+              style={styles.headerCol}>
+              <Image
+                style={{ resizeMode: "contain", top:3}}
+                source={require('../assets/images/wallet-20.png')} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('MeritStatement')}
+              style={styles.headerCol}>
+              <Image
+                style={{ resizeMode: "contain" }}
+                source={require('../assets/images/merit-24.png')} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => setMenuModalVisible(!menuModalVisible)}
+              style={styles.headerCol}>
+              <Image
+                style={{ resizeMode: "contain", top: 5 }}
+                source={require('../assets/images/out-16.png')} />
+            </TouchableOpacity>
+
+          </View>
+        )}
       </View>
+      
       <Modal
+        style={{zIndex:99}}
         animationType="fade"
         transparent={true}
         visible={menuModalVisible}
@@ -48,21 +94,21 @@ function HeaderComponent({ title }) {
             
             
             <View style={styles.modalContent}>
-                
+              {/*
                 {state.userToken == null ? (
                     // No token found, user isn't signed in
-                <>
-                  <TouchableOpacity
-                    onPress={() => navigation.navigate('Register')}
-                    style={styles.nav}>
-                    <Text style={styles.navText}>REGISTER</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => navigation.navigate('Login')}
-                    style={styles.nav}>
-                    <Text style={styles.navText}>Login</Text>
-                  </TouchableOpacity>
-                </>
+                  <>
+                    <TouchableOpacity
+                      onPress={() => navigation.navigate('Register')}
+                      style={styles.nav}>
+                      <Text style={styles.navText}>REGISTER</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => navigation.navigate('Login')}
+                      style={styles.nav}>
+                      <Text style={styles.navText}>Login</Text>
+                    </TouchableOpacity>
+                  </>
                 ) : (
                     // User is signed in
                     <>
@@ -71,24 +117,31 @@ function HeaderComponent({ title }) {
                         style={styles.nav}>
                         <Text style={styles.navText}>Home</Text>
                     </TouchableOpacity>
-                    
+                    <TouchableOpacity
+                      onPress={() => navigation.navigate('CommissionStatement')}
+                        style={styles.nav}>
+                        <Text style={styles.navText}>Commission</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => navigation.navigate('MeritStatement')}
+                        style={styles.nav}>
+                        <Text style={styles.navText}>Merit</Text>
+                    </TouchableOpacity>*/}
                     <TouchableOpacity
                         onPress={() => navigation.navigate('Logout')}
                         style={styles.nav}>
                         <Text style={styles.navText}>Logout</Text>
                     </TouchableOpacity>
-
+{/*
                     </>
                 )}
-
-
-                
+                */}
             </View>
           </View>
         </View>
             
       </Modal>
-        
+      
 
 
 
@@ -104,6 +157,10 @@ export default HeaderComponent;
 
 
 const styles = StyleSheet.create({
+  headerCol: {
+    flex: 1,
+    alignItems:'center',
+  },
   header: {
     flexDirection: 'row'
   },

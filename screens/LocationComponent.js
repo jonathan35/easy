@@ -20,6 +20,7 @@ export const LocationComponent = () => {
 
             let location = await Location.getCurrentPositionAsync({});
             setLocation(location);
+            dispatch({ type: 'SET_LOCATION', value: location });
         })();
     }, []);
 

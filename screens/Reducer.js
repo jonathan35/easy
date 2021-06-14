@@ -64,6 +64,11 @@ switch (action.type) {
     return {
         ...state,
         reloadOrders: action.value,
+        };
+    case 'SET_LOCATION':
+    return {
+        ...state,
+        driverLocation: action.value,
     };
 }
 };

@@ -282,6 +282,29 @@ export default StyleSheet.create({
   //------------------------ Home & Order --------------------------------
 
 
+
+  //------------------------ Merit Statement --------------------------------
+  meritStatement: {
+    flex: 1,    
+    flexDirection: 'row',
+    backgroundColor: '#FFF',
+    borderBottomWidth: 1,
+    borderBottomColor: '#DDD',
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    width: '100%',  
+  },
+  meritText: {
+    textAlign: 'center',
+    fontSize: 20,
+    color: 'green',
+  },
+  meritTextRed: {
+    textAlign: 'center',
+    fontSize: 20,
+    color: 'red',
+  }
+  
       
 });
 

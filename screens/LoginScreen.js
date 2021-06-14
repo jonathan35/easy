@@ -58,7 +58,6 @@ function LoginScreen({ navigation }) {
   };
 
 
-
     
   const loginApi = async () => {
 
@@ -107,11 +106,26 @@ function LoginScreen({ navigation }) {
     }
   };
 
+  //const getValueFor = async (key) => {
+  async function getValueFor(key) {
+    let result = await SecureStore.getItemAsync(key);
 
-    
+    if (result) {
+      //alert("🔐 Here's your value 🔐 \n" + result);
+      dispatch({ type: 'SIGN_IN', token: result });
+      storeUser(result);
+      //
+    } else {
+      //alert('No values stored under that key.');
+    }
+  }
+  useEffect(() => {
+    console.log(getValueFor('auth_user'));
+  }, []);
+
 
   function storeUser(json_str) {
-
+    
     let user = [];
 
     if (json_str != null && json_str != 'undefined' && json_str != '') {
@@ -139,7 +153,8 @@ function LoginScreen({ navigation }) {
         id: ar[0], region: ar[1], vehicle_type: ar[2], name: ar[3], working_time: ar[4], mobile_number: ar[5], emergency_contact_number: ar[6], plate_number: ar[7], branch_location_coordinate: ar[8], vehicle_belonging: ar[9], photo_of_ic: ar[10], photo_of_driving_license: ar[11], vehicle_front_view: ar[12], vehicle_back_view: ar[13], username: ar[14], status: ar[15], merit: ar[16]
       };
     }
-    dispatch({ type: 'SET_USER', user: user});
+    dispatch({ type: 'SET_USER', user: user });
+    
   }
 
 
@@ -153,6 +168,22 @@ function LoginScreen({ navigation }) {
 
       <ScrollView style={myStyle.mycontainer}>
       
+            
+
+        {/*years.map((item, key) => (
+          <View key={'new' + key}
+              style={myStyle.meritStatement}>
+              <View style={{flex:1}}>
+                  <Text style={[myStyle.FontS, { textAlign: 'right' }]}>
+                      {item.label}={item.value}
+                  </Text>
+              </View>
+          </View>
+      
+        ))*/}
+
+
+
         <View style={myStyle.inputBlock}>
           <Text style={{ textAlign: 'center' }}>
             <Text style={myStyle.h1}>LOGIN</Text>

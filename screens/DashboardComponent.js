@@ -3,13 +3,13 @@ import { View, Text, TouchableOpacity, Image } from 'react-native';
 import myStyle from "../assets/Style";
 import { Context } from './Store';
 import { LinearGradient } from "expo-linear-gradient";
-
+import { useNavigation } from '@react-navigation/native';
 
 
 export const DashboardComponent = () => {
 
     
-    
+    const navigation = useNavigation();
     const { state, dispatch } = useContext(Context);
     const [onOffTab, setOnOffTab] = useState(true);
     const [todayDuration, setTodayDuration] = useState(0);
@@ -147,7 +147,9 @@ export const DashboardComponent = () => {
                     </Text>
                 </TouchableOpacity>
             )}
-            <TouchableOpacity style={myStyle.onOff2}>
+            <TouchableOpacity
+                onPress={() => navigation.navigate('MeritStatement')}
+                style={myStyle.onOff2}>
                 <Text style={myStyle.onOffContent}>
                     <Text style={myStyle.onOffTitle2}>{state.user.merit} </Text>
                     <Image

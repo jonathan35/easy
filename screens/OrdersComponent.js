@@ -37,7 +37,7 @@ export const OrdersComponent = () => {
                     .then((response) => response.json())
                     .then((json) => {
                         let msg = json.driver_orders.message;
-                       setNewCount(JSON.stringify(json.driver_orders.orders.new_count));
+                        setNewCount(JSON.stringify(json.driver_orders.orders.new_count));
                         setDelCount(JSON.stringify(json.driver_orders.orders.del_count));
                         setHisCount(JSON.stringify(json.driver_orders.orders.his_count));
                         setNews(json.driver_orders.orders.news);
@@ -147,7 +147,10 @@ export const OrdersComponent = () => {
                 <View style={{flex:7}}>
                     <Text style={myStyle.Font}>
                         {item.sid} 
-                        <Text style={myStyle.FontGreenS}>   New</Text>
+                        <Text style={myStyle.FontGreenS}>  New</Text>
+                        {item.assign && (
+                            <Text style={myStyle.FontGreenS}>  Assigned</Text>
+                        )}
                     </Text>
                     <Text style={myStyle.FontS}>{item.date}</Text>
                 </View>

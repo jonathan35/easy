@@ -14,6 +14,9 @@ import RegisterScreen from "./RegisterScreen";
 import HomeScreen from "./HomeScreen";
 import NotifyScreen from "./NotifyScreen";
 import OrderScreen from "./OrderScreen";
+import MeritStatementScreen from "./MeritStatementScreen";
+import CommissionStatementScreen from "./CommissionStatementScreen";
+import OrdersStatementScreen from "./OrdersStatementScreen";
 import { HeaderBackButton } from '@react-navigation/stack';
 
 
@@ -33,8 +36,6 @@ const RootStackScreen = ({ navigation }) => {
     <Stack.Navigator>
       {state.userToken == null ? (
         <>
-  
-            
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="Register" component={RegisterScreen}/>
         </>
@@ -44,29 +45,47 @@ const RootStackScreen = ({ navigation }) => {
             options={{
               headerTitle: props => <Header title="Dashboard" />,
               headerLeft: () => { },
-              headerBack: props => <HeaderBackButton 
-                {...props}
-                onPress={() => {
-                  console.log('zzzzz')
-                }}
-              />,
+              headerBack: props => <HeaderBackButton />,
+              headerLeft: ()=> null,
               headerBackTitleStyle: { color: 'red'}
             }} />
           <Stack.Screen name="Order" component={OrderScreen}
             options={{
               headerTitle: props => <Header title="Order" />,
               headerBack: props => <HeaderBackButton 
-              {...props}
-              onPress={() => {
-                console.log('zzzzz')
-              }}
-            />,
-            headerBackTitleStyle: { color: 'red'}
+                {...props}
+                onPress={() => {
+                  console.log('zzzzz')
+                }}
+              />,
+              headerLeft: ()=> null,
+              headerBackTitleStyle: { color: 'red'}
+          }} />
+          <Stack.Screen name="OrdersStatement" component={OrdersStatementScreen}
+            options={{
+              headerTitle: props => <Header title="Orders History" />,
+              headerBack: props => <HeaderBackButton />,
+              headerLeft: ()=> null,
+              headerBackTitleStyle: { color: 'red'}
+          }} />
+          <Stack.Screen name="MeritStatement" component={MeritStatementScreen}
+            options={{
+              headerTitle: props => <Header title="Merit Statement" />,
+              headerBack: props => <HeaderBackButton />,
+              headerLeft: ()=> null,
+              headerBackTitleStyle: { color: 'red'}
+          }} />
+          <Stack.Screen name="CommissionStatement" component={CommissionStatementScreen}
+            options={{
+              headerTitle: props => <Header title="Commission Statement" />,
+              headerBack: props => <HeaderBackButton />,
+              headerLeft: ()=> null,
+              headerBackTitleStyle: { color: 'red'}
           }} />
           <Stack.Screen name="Logout" component={LogoutScreen} 
             options={{
               headerTitle: props => <Header title="Logout" />,
-              headerLeft: () => { }
+              headerLeft: ()=> null,
           }} />
           
         </>
