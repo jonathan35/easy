@@ -20,7 +20,7 @@ export default function ImageComponent() {
     data.append('file', {type:'image/jpg', uri:image_uri, name:'uploadimage.jpg'})
 
       try {
-        let response = await fetch('https://mingmingtravel.com/easyapi/api/post_photo.php', {
+        let response = await fetch('http://165.22.240.44/easymovenpick.com/api/post_photo.php', {
           method: 'post',
           headers: {
             'Content-Type': 'multipart/form-data; '

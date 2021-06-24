@@ -47,7 +47,7 @@ export const LocationComponent = () => {
             data.append('location', location)
                 
             try {
-                let response = await fetch('https://mingmingtravel.com/easyapi/api/location.php', {
+                let response = await fetch('http://165.22.240.44/easymovenpick.com/api/location.php', {
                     method: 'post',
                     headers: {
                         'Content-Type': 'multipart/form-data; '

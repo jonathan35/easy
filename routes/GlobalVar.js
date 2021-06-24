@@ -5,7 +5,7 @@ global.timeOptions = [
 
 global.supportNumber = '60168653947';
 global.serverRoot = 'https://mingmingtravel.com/';
-global.serverImageRoot = 'https://mingmingtravel.com/easyapi/api/';
+global.serverImageRoot = 'http://165.22.240.44/easymovenpick.com/api/';
 
 
 global.sessionUser = {'name': 'test in global2 '};

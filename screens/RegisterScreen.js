@@ -37,7 +37,7 @@ function Register({ navigation }) {
   const [types, setTypes] = useState([]);
   useEffect(() => {
     async function apiTypes() {
-      await fetch('https://mingmingtravel.com/easyapi/api/vehicle_types.php')//wphp.hopto.org not working
+      await fetch('http://165.22.240.44/easymovenpick.com/api/vehicle_types.php')//wphp.hopto.org not working
         .then((response) => response.json())
         .then((json) => setTypes(json.options))
         .catch((error) => console.error(error));
@@ -52,7 +52,7 @@ function Register({ navigation }) {
   const [regions, setRegions] = useState([]);
   useEffect(() => {
     async function apiRegions() {
-      await fetch('https://mingmingtravel.com/easyapi/api/regions.php')//wphp.hopto.org not working
+      await fetch('http://165.22.240.44/easymovenpick.com/api/regions.php')//wphp.hopto.org not working
         .then((response) => response.json())
         .then((json) => setRegions(json.options))
         .catch((error) => console.error(error));
@@ -89,7 +89,7 @@ function Register({ navigation }) {
     formBody = formBody.join("&");
     
     try {
-      let response = await fetch('https://mingmingtravel.com/easyapi/api/driver_apply.php', {
+      let response = await fetch('http://165.22.240.44/easymovenpick.com/api/driver_apply.php', {
         method: 'post',
         mode: 'no-cors',
         headers: {

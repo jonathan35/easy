@@ -36,7 +36,7 @@ function Register2({ navigation }) {
   const [types, setTypes] = useState([]);
 
   const apiTypes = () => {
-    fetch('https://mingmingtravel.com/easyapi/api/vehicle_types.php')//wphp.hopto.org not working
+    fetch('http://165.22.240.44/easymovenpick.com/api/vehicle_types.php')//wphp.hopto.org not working
       .then((response) => response.json())
       .then((json) => setTypes(json.options))
       .catch((error) => console.error(error));
@@ -49,7 +49,7 @@ function Register2({ navigation }) {
   const [regions, setRegions] = useState([]);
 
   const apiRegions = () => {
-    fetch('https://mingmingtravel.com/easyapi/api/regions.php')//wphp.hopto.org not working
+    fetch('http://165.22.240.44/easymovenpick.com/api/regions.php')//wphp.hopto.org not working
       .then((response) => response.json())
       .then((json) => setRegions(json.options))
       .catch((error) => console.error(error));

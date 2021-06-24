@@ -41,7 +41,7 @@ export const OrderScreen = ({ route, navigation }) => {
     data.append('action', action)
 
     try {
-      let response = await fetch('https://mingmingtravel.com/easyapi/api/update_order.php', {
+      let response = await fetch('http://165.22.240.44/easymovenpick.com/api/update_order.php', {
         method: 'post',
         headers: {
           'Content-Type': 'multipart/form-data; '
@@ -117,7 +117,7 @@ export const OrderScreen = ({ route, navigation }) => {
       data.append('oid', oid)
       setLoading(false);
       try {
-          let response = await fetch('https://mingmingtravel.com/easyapi/api/driver_order.php', {
+          let response = await fetch('http://165.22.240.44/easymovenpick.com/api/driver_order.php', {
               method: 'post',
               headers: {
                   'Content-Type': 'multipart/form-data; '
@@ -198,14 +198,6 @@ export const OrderScreen = ({ route, navigation }) => {
               
           <View>
           
-            <TouchableOpacity
-              style={[myStyle.button]}
-              onPress={() => {updateOrderApi('pod')}}>
-              <Text style={myStyle.buttonText}>FORCE POD</Text>
-            </TouchableOpacity>
-          {/**/}
-                
-
 
             {order.branch_name && (
               <View style={styles.block}>
@@ -436,8 +428,16 @@ export const OrderScreen = ({ route, navigation }) => {
 
           </View>
             
+          <View style={{ padding: 40 }}>
+            {/**/}
+            <TouchableOpacity
+              onPress={() => {updateOrderApi('pod')}}>
+              <Text>--</Text>
+            </TouchableOpacity>
+          </View>
+          
           <View style={{ height: 100, paddingTop: 40 }}>
-                <Text style={{ textAlign: 'center', color: '#666' }}>--------- END ---------</Text>
+            <Text style={{ textAlign: 'center', color: '#666' }}>--------- END ---------</Text>
           </View>
 
         </ScrollView>

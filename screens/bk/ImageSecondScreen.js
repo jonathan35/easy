@@ -27,7 +27,7 @@ export default function ImagePickerExample() {
         formBody = formBody.join("&");
         
         try {
-          let response = await fetch('https://mingmingtravel.com/easyapi/api/post_photo.php', {
+          let response = await fetch('http://165.22.240.44/easymovenpick.com/api/post_photo.php', {
             method: 'post',
             mode: 'no-cors',
             headers: {

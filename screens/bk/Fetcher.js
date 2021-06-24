@@ -7,7 +7,7 @@ const Fetcher = () => {
   const [data, setData] = useState([]);
   
   useEffect(() => {
-    fetch('https://mingmingtravel.com/easyapi/api/vehicle_types.php')//wphp.hopto.org not working
+    fetch('http://165.22.240.44/easymovenpick.com/api/vehicle_types.php')//wphp.hopto.org not working
       .then((response) => response.json())
       .then((json) => setData(json.types))
       .catch((error) => console.error(error))

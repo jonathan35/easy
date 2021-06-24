@@ -19,7 +19,7 @@ export default function ImagePickerExample() {
         data.append('file_attachment', fileToUpload);
         
         try {
-          let response = await fetch('https://mingmingtravel.com/easyapi/images/driver_photos', {
+          let response = await fetch('http://165.22.240.44/easymovenpick.com/images/driver_photos', {
             method: 'post',
             headers: {
                 'Content-Type': 'multipart/form-data; '

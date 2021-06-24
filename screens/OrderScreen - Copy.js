@@ -27,7 +27,7 @@ export const OrderScreen = ({ route, navigation }) => {
       data.append('oid', oid)
       data.append('uid', state.user.id)
       try {
-        let response = await fetch('https://mingmingtravel.com/easyapi/api/accept.php', {
+        let response = await fetch('http://165.22.240.44/easymovenpick.com/api/accept.php', {
           method: 'post',
           headers: {
             'Content-Type': 'multipart/form-data; '
@@ -54,7 +54,7 @@ export const OrderScreen = ({ route, navigation }) => {
       data.append('oid', oid)
       setLoading(false);
       try {
-          let response = await fetch('https://mingmingtravel.com/easyapi/api/driver_order.php', {
+          let response = await fetch('http://165.22.240.44/easymovenpick.com/api/driver_order.php', {
               method: 'post',
               headers: {
                   'Content-Type': 'multipart/form-data; '

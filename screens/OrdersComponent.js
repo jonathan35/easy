@@ -27,7 +27,7 @@ export const OrdersComponent = () => {
             let data = new FormData();
             data.append('uid', state.user.id)
             try {
-                let response = await fetch('https://mingmingtravel.com/easyapi/api/driver_orders.php', {
+                let response = await fetch('http://165.22.240.44/easymovenpick.com/api/driver_orders.php', {
                     method: 'post',
                     headers: {
                         'Content-Type': 'multipart/form-data; '
