@@ -37,7 +37,7 @@ function Register({ navigation }) {
   const [types, setTypes] = useState([]);
   useEffect(() => {
     async function apiTypes() {
-      await fetch('http://165.22.240.44/easymovenpick.com/api/vehicle_types.php')//wphp.hopto.org not working
+      await fetch('https://easymovenpick.com/api/vehicle_types.php')//wphp.hopto.org not working
         .then((response) => response.json())
         .then((json) => setTypes(json.options))
         .catch((error) => console.error(error));
@@ -52,7 +52,7 @@ function Register({ navigation }) {
   const [regions, setRegions] = useState([]);
   useEffect(() => {
     async function apiRegions() {
-      await fetch('http://165.22.240.44/easymovenpick.com/api/regions.php')//wphp.hopto.org not working
+      await fetch('https://easymovenpick.com/api/regions.php')//wphp.hopto.org not working
         .then((response) => response.json())
         .then((json) => setRegions(json.options))
         .catch((error) => console.error(error));
@@ -89,7 +89,7 @@ function Register({ navigation }) {
     formBody = formBody.join("&");
     
     try {
-      let response = await fetch('http://165.22.240.44/easymovenpick.com/api/driver_apply.php', {
+      let response = await fetch('https://easymovenpick.com/api/driver_apply.php', {
         method: 'post',
         mode: 'no-cors',
         headers: {
@@ -101,6 +101,7 @@ function Register({ navigation }) {
         .then((json) => {
 
           setPostMsg(json.application.message);
+
           fileUploading('register', username, { ic: state.photoIc, license: state.photoLicense, front: state.photoFront, back: state.photoBack });
           setLoading(false);
           
@@ -123,6 +124,7 @@ function Register({ navigation }) {
   const fadePassword = useRef(new Animated.Value(0)).current;
   const fadePlate = useRef(new Animated.Value(0)).current;
   const fadeOwner = useRef(new Animated.Value(0)).current;
+
   const fadeIc = useRef(new Animated.Value(0)).current;
   const fadeLicense = useRef(new Animated.Value(0)).current;
   const fadeFront = useRef(new Animated.Value(0)).current;
@@ -157,7 +159,13 @@ function Register({ navigation }) {
     password == 0 ? (fadeIn(fadePassword), err++) : (fadeOut(fadePassword))
     plate == 0 ? (fadeIn(fadePlate), err++) : (fadeOut(fadePlate))
     owner == 0 ? (fadeIn(fadeOwner), err++) : (fadeOut(fadeOwner))
-    
+
+    state.photoIc == null ? (fadeIn(fadeIc), err++) : (fadeOut(fadeIc))
+    state.photoLicense == null ? (fadeIn(fadeLicense), err++) : (fadeOut(fadeLicense))
+    state.photoFront == null ? (fadeIn(fadeFront), err++) : (fadeOut(fadeFront))
+    state.photoBack == null ? (fadeIn(fadeBack), err++) : (fadeOut(fadeBack))
+
+
     if (err <= 0) {
 
       applyApi();
@@ -315,7 +323,7 @@ function Register({ navigation }) {
             <Text style={myStyle.errorMsg}>IC is required.</Text>
           </Animated.View>
         </View>
-
+      
         <View style={myStyle.inputBlock}>
           <Text style={myStyle.label}>Driving License</Text>
           <ImagePickLibrary store_target='SET_LICENSE' />

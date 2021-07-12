@@ -41,7 +41,7 @@ export const OrderScreen = ({ route, navigation }) => {
     data.append('action', action)
 
     try {
-      let response = await fetch('http://165.22.240.44/easymovenpick.com/api/update_order.php', {
+      let response = await fetch('https://easymovenpick.com/api/update_order.php', {
         method: 'post',
         headers: {
           'Content-Type': 'multipart/form-data; '
@@ -84,13 +84,17 @@ export const OrderScreen = ({ route, navigation }) => {
         
         let order_lat = order.o_lat;
         let order_lng = order.o_lon;
-
+        
         if (order_lat > 0 && order_lng > 0) {
+
           //alert("🔐 \n" + status + '\n dri lat: ' + driver_lat + 'dri lon' + driver_lng + '\n order lat: ' + order_lat + 'order lon' + order_lng);
-      
+          //console.log('order:'+order_lat+'vs'+order_lng+'---driver:'+driver_lat+'vs'+driver_lng);
+          
           let degree = Math.abs(order_lat - driver_lat) + Math.abs(order_lng - driver_lng);
+          degree = Math.abs(degree);
           
           if (degree > 0) {
+
             let dis = Math.round(degree * 111);//1 degree about 111km
             setDistance(dis);
           }
@@ -117,7 +121,7 @@ export const OrderScreen = ({ route, navigation }) => {
       data.append('oid', oid)
       setLoading(false);
       try {
-          let response = await fetch('http://165.22.240.44/easymovenpick.com/api/driver_order.php', {
+          let response = await fetch('https://easymovenpick.com/api/driver_order.php', {
               method: 'post',
               headers: {
                   'Content-Type': 'multipart/form-data; '
@@ -330,7 +334,7 @@ export const OrderScreen = ({ route, navigation }) => {
             )}
             {order.pod !='-' && (
               <View style={{padding: 10, paddingTop: 40, width: '100%'}}>
-                <Text style={[styles.Font, { textAlign: 'center' }]}>PROOF OF DELIVERY</Text>
+                    <Text style={[styles.Font, { textAlign: 'center' }]}>PROOF OF DELIVERY</Text>
                 <Image
                   style={{ resizeMode: "contain", width:'100%', height: 500 }}
                   source={{ uri: serverImageRoot+order.pod }} />
@@ -380,6 +384,18 @@ export const OrderScreen = ({ route, navigation }) => {
             ) : (
               <View></View>
             )}
+
+
+            {status == 'Accepted' && (
+                <View style={myStyle.inputBlock}>
+                  <TouchableOpacity
+                    style={myStyle.button}
+                    onPress={() => {updateOrderApi('collect')}}
+                  ><Text style={myStyle.buttonText}>COLLECTED (Temporary)</Text></TouchableOpacity>
+                </View>
+            )/* */}
+            
+                
             
             {order.report == 'no internet' || reported ? (
               <View style={[myStyle.inputBlock, {paddingTop: 10}]}>
@@ -427,14 +443,9 @@ export const OrderScreen = ({ route, navigation }) => {
      
 
           </View>
-            
-          <View style={{ padding: 40 }}>
-            {/**/}
-            <TouchableOpacity
-              onPress={() => {updateOrderApi('pod')}}>
-              <Text>--</Text>
-            </TouchableOpacity>
-          </View>
+
+              
+     
           
           <View style={{ height: 100, paddingTop: 40 }}>
             <Text style={{ textAlign: 'center', color: '#666' }}>--------- END ---------</Text>

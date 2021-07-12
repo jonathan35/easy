@@ -49,7 +49,7 @@ export const CommissionStatementScreen = ({navigation}) => {
 
             setLoading(false);
             try {
-                let response = await fetch('http://165.22.240.44/easymovenpick.com/api/commission_statement.php', {
+                let response = await fetch('https://easymovenpick.com/api/commission_statement.php', {
                     method: 'post',
                     headers: {
                         'Content-Type': 'multipart/form-data; '

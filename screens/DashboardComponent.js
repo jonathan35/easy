@@ -37,7 +37,7 @@ export const DashboardComponent = () => {
             if (onoff != '') {
                 
                 try {
-                    let response = await fetch('http://165.22.240.44/easymovenpick.com/api/driver_on_off.php', {
+                    let response = await fetch('https://easymovenpick.com/api/driver_on_off.php', {
                         method: 'post',
                         headers: {
                             'Content-Type': 'multipart/form-data; '

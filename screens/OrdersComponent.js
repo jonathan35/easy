@@ -23,30 +23,38 @@ export const OrdersComponent = () => {
     const getOrderApi = async () => {
         
         if (state.user.id) {
+
             setUserFound(true)
             let data = new FormData();
             data.append('uid', state.user.id)
+
             try {
-                let response = await fetch('http://165.22.240.44/easymovenpick.com/api/driver_orders.php', {
+                let response = await fetch('https://easymovenpick.com/api/driver_orders.php', {
                     method: 'post',
                     headers: {
                         'Content-Type': 'multipart/form-data; '
                     },
                     body: data
                 })
-                    .then((response) => response.json())
-                    .then((json) => {
-                        let msg = json.driver_orders.message;
-                        setNewCount(JSON.stringify(json.driver_orders.orders.new_count));
-                        setDelCount(JSON.stringify(json.driver_orders.orders.del_count));
-                        setHisCount(JSON.stringify(json.driver_orders.orders.his_count));
-                        setNews(json.driver_orders.orders.news);
-                        setDelivers(json.driver_orders.orders.delivers);
-                        setDelivereds(json.driver_orders.orders.delivereds);
-                    })
+                .then((response) => response.json())
+                .then((json) => {
+                    
+                    let msg = json.driver_orders.message;
+                    setNewCount(JSON.stringify(json.driver_orders.orders.new_count));
+                    setDelCount(JSON.stringify(json.driver_orders.orders.del_count));
+                    setHisCount(JSON.stringify(json.driver_orders.orders.his_count));
+
+                    //console.log(json.driver_orders.orders);
+
+                    setNews(json.driver_orders.orders.news);
+                    setDelivers(json.driver_orders.orders.delivers);
+                    setDelivereds(json.driver_orders.orders.delivereds);
+                })
             } catch (error) {
-                console.log('Failed to connect.');
+                console.log('Failed to connect.-->' + JSON.stringify(error));
             }
+
+
         } else {
             console.log('No user info.');
         }
@@ -162,7 +170,6 @@ export const OrdersComponent = () => {
             </TouchableOpacity>
             
         ))))}
-        
         {delShow && (delCount <= 0 ? (
             <View style={{ padding: 10 }} >
                 <Text>No order under delivering yet..</Text>

@@ -74,7 +74,7 @@ function LoginScreen({ navigation }) {
     formBody = formBody.join("&");
 
     try {
-      let response = await fetch('http://165.22.240.44/easymovenpick.com/api/driver_login.php', {
+      let response = await fetch('https://easymovenpick.com/api/driver_login.php', {
         method: 'post',
         mode: 'no-cors',
         headers: {

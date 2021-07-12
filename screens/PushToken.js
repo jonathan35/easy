@@ -38,7 +38,7 @@ async function registerForPushNotificationsAsync(driver_id) {
     data.append('token', token)
 
     try {
-      let response = await fetch('http://165.22.240.44/easymovenpick.com/api/insert_token.php', {
+      let response = await fetch('https://easymovenpick.com/api/insert_token.php', {
         method: 'post',
         headers: {
           'Content-Type': 'multipart/form-data; '

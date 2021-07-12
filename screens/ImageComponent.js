@@ -8,6 +8,9 @@ import { Context } from './Store';
 
 export const fileUploading = async (type, username_oid, files) => {
     
+
+    //console.log('fileUploading:' + JSON.stringify(files));
+
     //const { state, dispatch } = useContext(Context);//Cause invalid hook
 
     if (username_oid) {
@@ -29,7 +32,7 @@ export const fileUploading = async (type, username_oid, files) => {
         //console.log('fileUploading>>>>: ' + JSON.stringify(data));
         
         try {
-            let response = await fetch('http://165.22.240.44/easymovenpick.com/api/post_photo.php', {
+            let response = await fetch('https://easymovenpick.com/api/post_photo.php', {
                 method: 'post',
                 headers: {
                     'Content-Type': 'multipart/form-data; '
