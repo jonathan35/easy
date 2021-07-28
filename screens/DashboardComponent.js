@@ -23,7 +23,7 @@ export const DashboardComponent = () => {
         
         if (state.user.id) {
             
-            setCaller(false);
+            setCaller(false);            
             
             let data = new FormData();
             data.append('uid', state.user.id)
@@ -46,6 +46,7 @@ export const DashboardComponent = () => {
                     })
                     .then((response) => response.json())
                     .then((json) => {
+                        
                         let message = json.message;
                         let result = json.result;
                         let today_duration = json.duration;
@@ -83,7 +84,7 @@ export const DashboardComponent = () => {
                 onOffApi('on');
             }
         }, 60000);//1 minute
-        console.log('myInterval');
+        //console.log('myInterval');
     }
 
 

@@ -55,7 +55,11 @@ export const OrderScreen = ({ route, navigation }) => {
           if (action == 'report') {
             setStatus('Accepted');
           } else if (action == 'accept') {
-            setStatus('Accepted');
+            if (json.result) {
+              setStatus('Accepted');
+            } else{
+              setStatus('Taken by Other Driver');
+            }
           } else if (action == 'collect') {
             setStatus('Collected');
           } else if (action == 'pod') {
@@ -407,12 +411,12 @@ export const OrderScreen = ({ route, navigation }) => {
                   NO INTERNET DURING COLLECTION.
                 </Text>
               </View>
-            ) : status != 'Ordered' ? (
+            ) : status == 'Accepted' ? (
               <View style={[myStyle.inputBlock, {paddingTop: 40}]}>
                 <TouchableOpacity
                   style={[myStyle.button2]}
                   onPress={() => {updateOrderApi('report'), setReported(true)}}>
-                  <Text style={myStyle.buttonText2}>REPORT NO INTERNET</Text>
+                        <Text style={myStyle.buttonText2}>REPORT NO INTERNET</Text>
                 </TouchableOpacity>
                 <Text style={{ color: 'gray', textAlign: 'center', padding: 5 }}>
                   Report no internet connection during goods collection to prevent slow pick demerit.

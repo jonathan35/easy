@@ -23,7 +23,7 @@ export const OrdersComponent = () => {
     const getOrderApi = async () => {
         
         if (state.user.id) {
-
+            
             setUserFound(true)
             let data = new FormData();
             data.append('uid', state.user.id)
@@ -56,15 +56,18 @@ export const OrdersComponent = () => {
 
 
         } else {
-            console.log('No user info.');
+            console.log('No user info for call orders.');
         }
         
     }
     
-
-    if (!userFound) {
-        getOrderApi();
-    }
+   
+    let myInterval = setInterval(() => {
+        if (!userFound) {
+            getOrderApi();
+        }
+    }, 10000);//60000 = 1 minute
+    
 
     React.useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
