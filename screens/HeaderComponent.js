@@ -60,10 +60,17 @@ function HeaderComponent({ title }) {
                 source={require('../assets/images/merit-24.png')} />
             </TouchableOpacity>
             <TouchableOpacity
+              onPress={() => navigation.navigate('Notification')}
+              style={styles.headerCol}>
+              <Image
+                style={{ resizeMode: "contain", top:2 }}
+                source={require('../assets/images/notification-20.png')} />
+            </TouchableOpacity>
+            <TouchableOpacity
               onPress={() => setMenuModalVisible(!menuModalVisible)}
               style={styles.headerCol}>
               <Image
-                style={{ resizeMode: "contain", top: 5 }}
+                style={{ resizeMode: "contain", top: 4 }}
                 source={require('../assets/images/out-16.png')} />
             </TouchableOpacity>
 

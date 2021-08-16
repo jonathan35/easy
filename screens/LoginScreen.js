@@ -92,13 +92,20 @@ function LoginScreen({ navigation }) {
           setLoginMsg(json_message);
 
           if (json_result == true) {
+            //console.log('LoginScreen::11::'+JSON.stringify(json_data));
             SecureStore.setItemAsync('auth_user', JSON.stringify(json_data));
             
             dispatch({ type: 'SIGN_IN', token: JSON.stringify(json_data) });
             storeUser(JSON.stringify(json_data));
             
           } else {
+            //console.log('LoginScreen::22::'+JSON.stringify(json_data));
             dispatch({ type: 'SIGN_IN', token: null });
+
+            if (json_message == 'Account suspended') {
+              alert('Your account suspended, contact administrator to activate back your account.');
+            }
+
           }
         })
     } catch (error) {
@@ -222,7 +229,7 @@ function LoginScreen({ navigation }) {
             title="Login"
             onPress={() => { validate() }}
           ><Text style={myStyle.buttonText}>LOGIN</Text></TouchableOpacity>
-          <Text style={myStyle.inputBlock}>
+              <Text style={ [myStyle.inputBlock, {textAlign: 'center' }]}>
             {loginMsg}
           </Text>
 

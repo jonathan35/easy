@@ -20,7 +20,6 @@ function NotifyScreen({ navigation }) {
     return (
         <View style={myStyle.body}>
             <View style={{width: '100%',}}>
-                
             </View>
             <Text style={{ paddingBottom: 80 }}></Text>
             

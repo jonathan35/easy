@@ -7,6 +7,7 @@ import { DashboardComponent } from './DashboardComponent';
 import { OrdersComponent } from './OrdersComponent';
 import Loading from './LoadingScreen';
 import { LocationComponent } from './LocationComponent';
+import { AccountSyncComponent } from './AccountSyncComponent';
 import { PushToken } from './PushToken';
 
 
@@ -27,8 +28,9 @@ function HomeScreen({ navigation }) {
         <Loading />
     ) : (
  
-        <ScrollView style={{flex:1, width:'100%'}}>
+        <ScrollView style={{ flex: 1, width: '100%' }}>
             <PushToken />
+            <AccountSyncComponent />
             <LocationComponent />
             <DashboardComponent />
             <OrdersComponent />

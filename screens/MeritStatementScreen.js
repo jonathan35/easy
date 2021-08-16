@@ -5,7 +5,7 @@ import Loading from './LoadingScreen';
 import myStyle from "../assets/Style";
 import { PushToken } from './PushToken';
 import RNPickerSelect from 'react-native-picker-select';
-
+import { AccountSyncComponent } from './AccountSyncComponent';
 
 
 export const MeritStatementScreen = ({navigation}) => {
@@ -75,6 +75,7 @@ export const MeritStatementScreen = ({navigation}) => {
 
     return (
     <View style={myStyle.body}>
+        <AccountSyncComponent />
     {isLoading ? (
         <Loading />
     ) : (

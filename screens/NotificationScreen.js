@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
-import { TouchableOpacity, View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { Context } from './Store';
 import Loading from './LoadingScreen';
 import myStyle from "../assets/Style";
@@ -8,7 +8,7 @@ import RNPickerSelect from 'react-native-picker-select';
 import { AccountSyncComponent } from './AccountSyncComponent';
 
 
-export const OrdersStatementScreen = ({navigation}) => {
+export const NotificaitonScreen = ({navigation}) => {
 
     
     var currentYear = new Date().getFullYear();
@@ -16,8 +16,8 @@ export const OrdersStatementScreen = ({navigation}) => {
     var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     const { state, dispatch } = useContext(Context);
     const [isLoading, setLoading] = useState(true);
-    const [orders, setOrders] = useState([]);
-    const [count, setCount] = useState(0);
+    const [notifications, setCommissions] = useState([]);
+    const [total, setTotal] = useState(0);
     const [year, setYear] = useState(currentYear);
     const [month, setMonth] = useState(currentMonth);
     
@@ -36,22 +36,20 @@ export const OrdersStatementScreen = ({navigation}) => {
         )
     }
 
-
     
-    const getOrdersApi = async (year, month) => {
+    const getNotificationApi = async (getYear, getMonth) => {
         if (state.user.id) {
             let data = new FormData();
 
-            console.log('uid:' + state.user.id + ' year: ' + year + ' month: ' + month);
+            console.log('uid:' + state.user.id + ' year: ' + getYear + ' month: ' + getMonth);
             
             data.append('uid', state.user.id)
-            data.append('year', year)
-            data.append('month', month)
-            
-            setLoading(false);
+            data.append('year', getYear)
+            data.append('month', getMonth)
 
+            setLoading(false);
             try {
-                let response = await fetch('https://easymovenpick.com/api/orders_statement.php', {
+                let response = await fetch('https://easymovenpick.com/api/notification_statement.php', {
                     method: 'post',
                     headers: {
                         'Content-Type': 'multipart/form-data; '
@@ -60,20 +58,19 @@ export const OrdersStatementScreen = ({navigation}) => {
                 })
                 .then((response) => response.json())
                 .then((json) => {
-                    setOrders(json.orders);
-                    setCount(json.count);
-                    
+                    setCommissions(json.notifications);
+                    setTotal(json.total);
                 })
             } catch (error) {
-                console.log('Failed to get orders statement');
+                console.log('Failed to get notifications statement');
             }
         } else {
-            console.log('No user id to get orders statement');
+            console.log('No user id to get notifications statement');
         }
     }
 
     useEffect(() => {
-        getOrdersApi(currentYear, currentMonth);
+        getNotificationApi(currentYear, currentMonth);
     }, []);
 
     
@@ -85,13 +82,13 @@ export const OrdersStatementScreen = ({navigation}) => {
     ) : (
         <ScrollView style={{flex:1, width:'100%'}}>
             <PushToken />
-            <View style={{ flex:1, flexDirection: 'row', padding: 5, backgroundColor: '#56aaff' }}>
+            <View style={{ flex:1, flexDirection: 'row', padding: 5, backgroundColor: '#ff85a6' }}>
                 <View style={{ flex:1, padding: 10 }}>
                     <View style={myStyle.selectOutter}>
                         <View style={myStyle.selectInner}>
                             <RNPickerSelect
                                 placeholder={{}}
-                                onValueChange={(val) => { setYear(val), getOrdersApi(val, month) }}
+                                onValueChange={(val) => { setYear(val), getNotificationApi(val, month) }}
                                 items={years}
                             />
                         </View>
@@ -102,7 +99,7 @@ export const OrdersStatementScreen = ({navigation}) => {
                         <View style={myStyle.selectInner}>
                             <RNPickerSelect
                                 placeholder={{}}
-                                onValueChange={(val) => { setMonth(val), getOrdersApi(year, val) }}
+                                onValueChange={(val) => { setMonth(val), getNotificationApi(year, val) }}
                                 items={months}
                                 value={month}
                             />
@@ -114,39 +111,43 @@ export const OrdersStatementScreen = ({navigation}) => {
             
             <View style={{ padding: 10, borderBottomColor: '#DDD', borderBottomWidth: 1, paddingVertical: 12 }}>
                 <Text style={{ fontSize: 20, textAlign: 'center' }}>
-                                Order History ({year} {monthNames[month-1]})
+                Commission ({year} {monthNames[month-1]})
                 </Text>
+                <View>
+                    <Text style={{fontSize: 16, textAlign: 'center', color: 'gray'}}>
+                        Total: RM{total}
+                    </Text>
+                </View>
             </View>
 
 
 
-            {!orders ? (
+            {!notifications ? (
             <View style={{ padding: 10 }} >
-                <Text>No order found..</Text>
+                <Text>No notification found..</Text>
             </View>
             ) : (
                 <>
-                    {orders.map((item, key) => (
-                    <TouchableOpacity
-                        onPress={() => navigation.navigate('Order', { oid: item.id })}
+                    {notifications.map((item, key) => (
+                    <View
                         key={'new' + key}
                         style={myStyle.meritStatement}>
-                        <View style={{ flex: 1 }}>
-                            <Text style={myStyle.Font}>{key + 1}.</Text>
-                        </View>
-                        <View style={{ flex: 7 }}>
-                            <Text style={myStyle.Font}>
-                                {item.sid} 
-                                <Text style={myStyle.FontGreenS}>   {item.status}</Text>
-                            </Text>
-                            <Text style={myStyle.FontS}>{item.date}</Text>
-                        </View>
-                        <View style={{ flex: 4, }}>
-                            <Text style={[myStyle.Font, { textAlign: 'right' }]}>
-                                {item.distance}KM
+                        <View style={{flex:3}}>
+                            <Text style={[myStyle.FontS]}>
+                                {item.date}
                             </Text>
                         </View>
-                    </TouchableOpacity>
+                        <View style={{flex:9}}>
+                            <Text style={{fontSize:20}}>
+                                {item.title}
+                            </Text>
+                            <Text style={[myStyle.FontS]}>
+                                {item.message}
+                            </Text>
+                        </View>
+                       
+                        
+                    </View>
                     ))}
                 </>
             )}
@@ -157,7 +158,7 @@ export const OrdersStatementScreen = ({navigation}) => {
 
 }
 
-export default OrdersStatementScreen;
+export default NotificaitonScreen;
 
 
 const styles = StyleSheet.create({

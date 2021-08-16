@@ -16,6 +16,7 @@ import NotifyScreen from "./NotifyScreen";
 import OrderScreen from "./OrderScreen";
 import MeritStatementScreen from "./MeritStatementScreen";
 import CommissionStatementScreen from "./CommissionStatementScreen";
+import NotificationScreen from "./NotificationScreen";
 import OrdersStatementScreen from "./OrdersStatementScreen";
 import { HeaderBackButton } from '@react-navigation/stack';
 
@@ -76,6 +77,13 @@ const RootStackScreen = ({ navigation }) => {
               headerBackTitleStyle: { color: 'red'}
           }} />
           <Stack.Screen name="CommissionStatement" component={CommissionStatementScreen}
+            options={{
+              headerTitle: props => <Header title="Commission Statement" />,
+              headerBack: props => <HeaderBackButton />,
+              headerLeft: ()=> null,
+              headerBackTitleStyle: { color: 'red'}
+          }} />
+          <Stack.Screen name="Notification" component={NotificationScreen}
             options={{
               headerTitle: props => <Header title="Commission Statement" />,
               headerBack: props => <HeaderBackButton />,

@@ -112,16 +112,16 @@ export const OrdersComponent = () => {
     }
    
 
-    function hideUnhide(key) {
+    function hideUnhide(rowkey) {
 
         let oldList = hideList
 
         if (oldList == '') {//Empty oldList
-            oldList = '|'+key+'|';
-        } else if (oldList.includes('|'+key+'|')) {//Key found in oldList before
-            oldList = oldList.replace('|'+key+'|','');
+            oldList = '|'+rowkey+'|';
+        } else if (oldList.includes('|'+rowkey+'|')) {//Key found in oldList before
+            oldList = oldList.replace('|'+rowkey+'|','');
         } else {
-            oldList = oldList + '|' + key + '|';
+            oldList = oldList + '|' + rowkey + '|';
         }
         setHideList(oldList)
     }
@@ -163,19 +163,19 @@ export const OrdersComponent = () => {
             <View style={{ padding: 10 }} >
                 <Text>No new order yet..</Text>
             </View>
-        ) : (news.map((item, key) => (
+        ) : (news.map((item, newkey) => (
             <View style={[
                 styles.row,
-                hideList.includes('|new'+key+'|') && styles.rowHide
-            ]} key={'new' + key}>
+                hideList.includes('|new'+newkey+'|') && styles.rowHide
+            ]}>
                 <TouchableOpacity
-                    onPress={() => { hideUnhide('new'+key) }}
+                    onPress={() => { hideUnhide('new'+newkey) }}
                     style={[
                         styles.iconPlusMinus,
-                        hideList.includes('|new'+key+'|') ? styles.iconPlus : styles.iconMinus
+                        hideList.includes('|new'+newkey+'|') ? styles.iconPlus : styles.iconMinus
                     ]}>
                     <Text style={{ textAlign: 'center', justifyContent: 'center' }}>
-                        {hideList.includes('|new'+key+'|') ? (
+                        {hideList.includes('|new'+newkey+'|') ? (
                             <Image
                             style={{resizeMode: "contain"}}
                             source={require('../assets/images/plus-16.png')} />
@@ -189,13 +189,13 @@ export const OrdersComponent = () => {
                 <TouchableOpacity
                     style={[
                         myStyle.order,
-                        hideList.includes('|new'+key+'|') && styles.colHide,
+                        hideList.includes('|new'+newkey+'|') && styles.colHide,
                         { flex: 20}
                     ]}
                     onPress={() => navigation.navigate('Order', { oid: item.id }, getOrderApi())}
-                    >
+                    key={'new' + newkey}>
                     <View style={{flex:1}}>
-                        <Text style={myStyle.Font}>{key+1}.</Text>
+                        <Text style={myStyle.Font}>{newkey+1}.</Text>
                     </View>
                     <View style={{flex:7}}>
                         <Text style={myStyle.Font}>
@@ -220,19 +220,19 @@ export const OrdersComponent = () => {
             <View style={{ padding: 10 }} >
                 <Text>No order under delivering yet..</Text>
             </View>
-        ) : (delivers.map((item, key) => (
+        ) : (delivers.map((item, doingkey) => (
             <View style={[
                 styles.row,
-                hideList.includes('|doing'+key+'|') && styles.rowHide
-            ]} key={'deliver' + key}>
+                hideList.includes('|doing'+doingkey+'|') && styles.rowHide
+            ]}>
                 <TouchableOpacity
-                    onPress={() => { hideUnhide('doing'+key) }}
+                    onPress={() => { hideUnhide('doing'+doingkey) }}
                     style={[
                         styles.iconPlusMinus,
-                        hideList.includes('|doing'+key+'|') ? styles.iconPlus : styles.iconMinus
+                        hideList.includes('|doing'+doingkey+'|') ? styles.iconPlus : styles.iconMinus
                     ]}>
                     <Text style={{ textAlign: 'center', justifyContent: 'center' }}>
-                        {hideList.includes('|doing'+key+'|') ? (
+                        {hideList.includes('|doing'+doingkey+'|') ? (
                             <Image
                             style={{resizeMode: "contain"}}
                             source={require('../assets/images/plus-16.png')} />
@@ -246,14 +246,14 @@ export const OrdersComponent = () => {
                 <TouchableOpacity
                     style={[
                         myStyle.order,
-                        hideList.includes('|doing'+key+'|') && styles.colHide,
+                        hideList.includes('|doing'+doingkey+'|') && styles.colHide,
                         { flex: 20}
                     ]}
                     onPress={() => navigation.navigate('Order', { oid: item.id })}
-                    
+                    key={'deliver' + doingkey}
                     >
                     <View style={{flex:1}}>
-                        <Text style={myStyle.Font}>{key+1}.</Text>
+                        <Text style={myStyle.Font}>{doingkey+1}.</Text>
                     </View>
                     <View style={{flex:7}}>
                         <Text style={myStyle.Font}>
@@ -275,19 +275,19 @@ export const OrdersComponent = () => {
             <View style={{ padding: 10 }} >
                 <Text>No delivered order yet..</Text>
             </View>
-        ) : (delivereds.map((item, key) => (
+        ) : (delivereds.map((item, donekey) => (
             <View style={[
                 styles.row,
-                hideList.includes('|done'+key+'|') && styles.rowHide
-            ]} key={'history' + key}>
+                hideList.includes('|done'+donekey+'|') && styles.rowHide
+            ]}>
                 <TouchableOpacity
-                    onPress={() => { hideUnhide('done'+key) }}
+                    onPress={() => { hideUnhide('done'+donekey) }}
                     style={[
                         styles.iconPlusMinus,
-                        hideList.includes('|done'+key+'|') ? styles.iconPlus : styles.iconMinus
+                        hideList.includes('|done'+donekey+'|') ? styles.iconPlus : styles.iconMinus
                     ]}>
                     <Text style={{ textAlign: 'center', justifyContent: 'center' }}>
-                        {hideList.includes('|done'+key+'|') ? (
+                        {hideList.includes('|done'+donekey+'|') ? (
                             <Image
                             style={{resizeMode: "contain"}}
                             source={require('../assets/images/plus-16.png')} />
@@ -301,13 +301,14 @@ export const OrdersComponent = () => {
                 <TouchableOpacity
                     style={[
                         myStyle.order,
-                        hideList.includes('|done'+key+'|') && styles.colHide,
+                        hideList.includes('|done'+donekey+'|') && styles.colHide,
                         { flex: 20}
                     ]}
                     onPress={() => navigation.navigate('Order', { oid: item.id })}
+                    key={'history' + donekey}
                     >
                     <View style={{ flex: 1 }}>
-                        <Text style={myStyle.Font}>{key + 1}.</Text>
+                        <Text style={myStyle.Font}>{donekey + 1}.</Text>
                     </View>
                     <View style={{ flex: 7 }}>
                         <Text style={myStyle.Font}>

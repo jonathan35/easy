@@ -57,7 +57,7 @@ export const LocationComponent = () => {
                     .then((response) => response.json())
                     .then((json) => {
                         let message = json.message;
-                        console.log('Loaded>>>>'+location);
+                        //console.log('Loaded>>>>'+location);
                     })
             } catch (error) {
                 console.log(error);

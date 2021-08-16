@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, TouchableOpacity, Image } from 'react-native';
+import { View, Text, TouchableOpacity, Image, Alert } from 'react-native';
 import myStyle from "../assets/Style";
 import { Context } from './Store';
 import { LinearGradient } from "expo-linear-gradient";
@@ -15,12 +15,35 @@ export const DashboardComponent = () => {
     const [todayDuration, setTodayDuration] = useState(0);
     const [timer, setTimer] = useState('..');
     const [caller, setCaller] = useState(true);
+    const [confirmOff, setConfirmOff] = useState(0);
+    
 
+    const showConfirmDialog = () => {
+        return Alert.alert(
+            "Are your sure?",
+            "Are you sure you want to turn off?",
+            [
+                // The "Yes" button
+                {
+                    text: "Yes",
+                    onPress: () => {
+                        onOffApi('off')
+                    },
+                },
+                // The "No" button
+                // Does nothing but dismiss the dialog when tapped
+                {
+                    text: "No",
+                },
+            ]
+        );
+    };
 
 
     const onOffApi = async (onoff) => {
 
-        
+        var pass = true;
+
         if (state.user.id) {
             
             setCaller(false);            
@@ -31,41 +54,48 @@ export const DashboardComponent = () => {
             if (onoff == 'off') {
                 data.append('onoff', 'off')
             } else if (onoff == 'on') {
-                data.append('onoff', 'on')
+                data.append('onoff', 'on')                
             }
 
-            if (onoff != '') {
-                
-                try {
-                    let response = await fetch('https://easymovenpick.com/api/driver_on_off.php', {
-                        method: 'post',
-                        headers: {
-                            'Content-Type': 'multipart/form-data; '
-                        },
-                        body: data
-                    })
-                    .then((response) => response.json())
-                    .then((json) => {
+            if (pass == true) {
+                if (onoff != '') {
+                    try {
+                        let response = await fetch('https://easymovenpick.com/api/driver_on_off.php', {
+                            method: 'post',
+                            headers: {
+                                'Content-Type': 'multipart/form-data; '
+                            },
+                            body: data
+                        })
+                            .then((response) => response.json())
+                            .then((json) => {
                         
-                        let message = json.message;
-                        let result = json.result;
-                        let today_duration = json.duration;
-                        let start_time = json.start_time;
-                        let onoff = '';//global onoff undefined here
-                        //console.log('DashboardC('+state.user.id+')'+'-->'+result + message );
+                                let message = json.message;
+                                let result = json.result;
+                                let today_duration = json.duration;
+                                let start_time = json.start_time;
+                                let onoff = '';//global onoff undefined here
+                                //console.log('DashboardC('+state.user.id+')'+'-->'+result + message );
                         
-                        if (result == 'started') {
-                            setOnOffTab(true)
-                            setTodayDuration(today_duration);
-                            onlineTime(today_duration);
-                        } else if (result == 'ended') {
-                            setOnOffTab(false)
-                            setTodayDuration(today_duration);
-                            onlineTime(today_duration);
-                        }
-                    })
-                } catch (error) {
-                    console.log(error);
+                                let user = state.user;
+                                user['merit'] = json.merit;
+                                dispatch({ type: 'SET_USER', user: user });
+
+                                if (result == 'started') {
+                                    console.log('turn on liao');
+                                    setOnOffTab(true)
+                                    setTodayDuration(today_duration);
+                                    onlineTime(today_duration);
+                                } else if (result == 'ended') {
+                                    console.log('turn off liao');
+                                    setOnOffTab(false)
+                                    setTodayDuration(today_duration);
+                                    onlineTime(today_duration);
+                                }
+                            })
+                    } catch (error) {
+                        console.log(error);
+                    }
                 }
             }
         } else {
@@ -83,11 +113,11 @@ export const DashboardComponent = () => {
             if (state.user.id) {
                 onOffApi('on');
             }
-        }, 60000);//1 minute
+        }, 60000);//60000 = 1 minute
         //console.log('myInterval');
     }
 
-
+  
     function onlineTime(today_duration) {
             
         let timerStr = '';
@@ -121,7 +151,7 @@ export const DashboardComponent = () => {
         
             {onOffTab ? (
                 <TouchableOpacity
-                    onPress={() => onOffApi('off')}
+                    onPress={() => showConfirmDialog()}
                     style={myStyle.onOff1}>
                     <Text style={myStyle.onOffContent}>
                         <Text style={myStyle.onOffTitle1}>ON </Text>

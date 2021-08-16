@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, TextInput, StyleSheet, ScrollView, Animated, TouchableOpacity, Alert } from 'react-native';
 import { Context } from './Store';
 import Loading from './LoadingScreen';
 import myStyle from "../assets/Style";
 import { PushToken } from './PushToken';
 import RNPickerSelect from 'react-native-picker-select';
+import { AccountSyncComponent } from './AccountSyncComponent';
+import { LinearGradient } from "expo-linear-gradient";
 
 
 
@@ -17,11 +19,82 @@ export const CommissionStatementScreen = ({navigation}) => {
     const { state, dispatch } = useContext(Context);
     const [isLoading, setLoading] = useState(true);
     const [commissions, setCommissions] = useState([]);
-    const [total, setTotal] = useState(0);
+    //const [total, setTotal] = useState(0);
     const [year, setYear] = useState(currentYear);
     const [month, setMonth] = useState(currentMonth);
+    const [comissionBonus, setCommissionBonus] = useState(0);
+    const [withdrawMerit, setWithdrawMerit] = useState(0);
+    const [maxWithdrawMerit, setMaxWithdrawMerit] = useState(0);
+    const [submitResult, setSubmitResult] = useState('');
     
+
+
+    //----------------------Api request withdraw - Start ----------------------
+    const requestWithdrawApi = async (action) => {
+        
+        setLoading(true);
+        let data = new FormData();
+        data.append('withdraw_merit', withdrawMerit)
+        data.append('uid', state.user.id)
+
+        try {
+            let response = await fetch('https://easymovenpick.com/api/request_withdraw.php', {
+            method: 'post',
+            headers: {
+                'Content-Type': 'multipart/form-data; '
+            },
+            body: data
+            })
+            .then((response) => response.json())
+            .then((json) => {
+                setLoading(false);
+                if (json.result) {
+                    setSubmitResult(json.message);
+                    //console.log(json.message);
+                }
+            })
+        } catch (error) {
+            console.log('Failed to connect.');
+            setLoading(false);
+        }
+    }
+    //----------------------Api request withdraw - End ----------------------
+
+
+
+    const fadeWithdrawMerit = useRef(new Animated.Value(0)).current;
+    const fadeIn = (e) => {
+        Animated.timing(e, {
+          toValue: 1,
+          duration: 500,
+          useNativeDriver: true
+        }).start();
+    };
     
+    const fadeOut = (e) => {
+        Animated.timing(e, {
+          toValue: 0,
+          duration: 500,
+          useNativeDriver: true
+        }).start();
+    };
+
+    const validate = () => {
+    
+        var err = 0;        
+        withdrawMerit > maxWithdrawMerit ? (
+            fadeIn(fadeWithdrawMerit),
+            err++,
+            alert('Maximum '+maxWithdrawMerit+' points')
+        ) : (
+            fadeOut(fadeWithdrawMerit)
+        )    
+        if (err <= 0) {
+            requestWithdrawApi(); 
+        }    
+      };
+
+
     var years = [];
     for(let y = 2021; y <= currentYear; y++){
         years.push(
@@ -59,7 +132,9 @@ export const CommissionStatementScreen = ({navigation}) => {
                 .then((response) => response.json())
                 .then((json) => {
                     setCommissions(json.commissions);
-                    setTotal(json.total);
+                    //setTotal(json.total);
+                    setCommissionBonus(json.commission_bonus);
+                    setMaxWithdrawMerit(json.withdrawable_merit);
                 })
             } catch (error) {
                 console.log('Failed to get commissions statement');
@@ -76,11 +151,52 @@ export const CommissionStatementScreen = ({navigation}) => {
     
     return (
     <View style={myStyle.body}>
+        <AccountSyncComponent />
     {isLoading ? (
         <Loading />
     ) : (
         <ScrollView style={{flex:1, width:'100%'}}>
             <PushToken />
+          
+                        
+            <LinearGradient colors={["rgba(230,230,230,1)", "rgba(177,177,177,1)"]}>
+
+                <View style={{ padding: 15 }}></View>
+                <Text style={{ fontSize: 46, textAlign: 'center' }}>RM{comissionBonus}</Text>
+                <Text style={[myStyle.FontGray, { textAlign: 'center' }]}>Commission + Bonus</Text>
+                <View style={{ padding: 15 }}></View>
+
+                <Text style={{ fontSize: 14, textAlign: 'center', paddingHorizontal: 12 }}>
+                    How much merit to withdraw? (Max. {maxWithdrawMerit} points).
+                </Text>
+                <Text style={{ fontSize: 14, textAlign: 'center', paddingHorizontal: 12, paddingBottom: 4 }}>
+                    Leave empty for withdraw without consume merit.
+                </Text>
+                <TextInput style={[myStyle.input, { width: '30%', marginHorizontal: '35%' }]}
+                    placeholder="points" keyboardType="numeric" maxLength={3} 
+                    onChangeText={(val) => { setWithdrawMerit(val); fadeOut(fadeWithdrawMerit)}}/>
+            
+                <Animated.View style={{opacity: fadeWithdrawMerit}}>
+                    <Text style={[myStyle.errorMsg, { textAlign: 'center' }]}>
+                        Maximum {maxWithdrawMerit} points.
+                    </Text>
+                </Animated.View>
+                
+                <View style={{paddingBottom:40}}>
+                    <View style={myStyle.inputBlock} >
+                        <TouchableOpacity
+                        style={[myStyle.button, {width: '70%', marginHorizontal: '15%'}]}
+                        onPress={() => {validate()}}
+                        ><Text style={myStyle.buttonText}>REQUEST WITHDRAW</Text></TouchableOpacity>
+                    </View>
+                    <Text style={{ textAlign: 'center' }}>{submitResult}</Text>
+                  
+                </View>
+
+            </LinearGradient>
+
+
+                            
             <View style={{ flex:1, flexDirection: 'row', padding: 5, backgroundColor: '#5be5b0' }}>
                 <View style={{ flex:1, padding: 10 }}>
                     <View style={myStyle.selectOutter}>
@@ -112,11 +228,6 @@ export const CommissionStatementScreen = ({navigation}) => {
                 <Text style={{ fontSize: 20, textAlign: 'center' }}>
                 Commission ({year} {monthNames[month-1]})
                 </Text>
-                <View>
-                    <Text style={{fontSize: 16, textAlign: 'center', color: 'gray'}}>
-                        Total: RM{total}
-                    </Text>
-                </View>
             </View>
 
 

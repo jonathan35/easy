@@ -47,10 +47,10 @@ async function registerForPushNotificationsAsync(driver_id) {
       })
         .then((response) => response.json())
         .then((json) => {
-          console.log(token+' inserted to server');
+          //console.log('Success to insert token. driver_id: '+driver_id+' token: '+token);
         })
     } catch (error) {
-      console.log('Failed to insert token. driver_id: '+driver_id+' token: '+token);
+      console.log('Failed to insert token. driver_id: '+driver_id+' token: '+token+' error: '+error);
     }
   } else {
     alert('Must use physical device for Push Notifications');
@@ -77,11 +77,13 @@ export const PushToken = () => {
   const [notification, setNotification] = useState(false);
   const notificationListener = useRef();
   const responseListener = useRef();
+  
 
-  useEffect(() => {
-      
-    if(state.user.id){
+  const synToken = async () => {
+        
+    if (state.user.id) {
 
+      //console.log('c' + state.user.id);
       registerForPushNotificationsAsync(state.user.id).then(token => setExpoPushToken(token));
 
       notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
@@ -96,14 +98,16 @@ export const PushToken = () => {
         Notifications.removeNotificationSubscription(notificationListener.current);
         Notifications.removeNotificationSubscription(responseListener.current);
       };
-
-      //console.log('Your expo push token:'+expoPushToken);
+      //console.log('Your expo push token:' + expoPushToken);
+      
     } else {
-      console.log('state user id not found');
+      //console.log('no user for push token');
     }
-  }, []);
+  }
 
 
+  synToken();
+  
 
   return (
     <></>

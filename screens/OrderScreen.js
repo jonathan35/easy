@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
-import { TouchableOpacity, Image, View, Text, StyleSheet, ScrollView, Animated } from 'react-native';
+import { TouchableOpacity, Image, View, Text, StyleSheet, ScrollView, Animated, Button, Linking } from 'react-native';
 import { LinearGradient } from "expo-linear-gradient";
 import { Context } from './Store';
 import Loading from './LoadingScreen';
@@ -9,7 +9,7 @@ import { ImagePickLibrary, fileUploading } from './ImageComponent';
 import GlobalVar from '../routes/GlobalVar';
 import { PushToken } from './PushToken';
 import { useFocusEffect } from '@react-navigation/native';
-
+import { AccountSyncComponent } from './AccountSyncComponent';
 
 
 export const OrderScreen = ({ route, navigation }) => {
@@ -22,6 +22,10 @@ export const OrderScreen = ({ route, navigation }) => {
   const [reported, setReported] = useState(false);
   const [declined, setDeclined] = useState(false);
   const [distance, setDistance] = useState(10);
+
+  const [latLink, setLatLink] = useState(1.5597964);
+  const [lngLink, setLngLink] = useState(110.3110226);
+
   const oid = route.params.oid;
   
   //---------- MAP -------------
@@ -31,7 +35,8 @@ export const OrderScreen = ({ route, navigation }) => {
   const [markDes, setMarkDes] = useState({latitude: lat, longitude: lon});
   const [center, setCenter] = useState({latitude: lat, longitude: lon, latitudeDelta: 0.1, longitudeDelta: 0.1,});
   
-  
+
+
   const updateOrderApi = async (action) => {
 
     setLoading(true);
@@ -107,6 +112,7 @@ export const OrderScreen = ({ route, navigation }) => {
     }
   }
 
+
   useEffect(() => {
     let myInterval = setInterval(() => {
       if (state.user.id) {
@@ -114,7 +120,7 @@ export const OrderScreen = ({ route, navigation }) => {
       }
     }, 20000);//20 sec
   }, []);
-
+  
   
   useEffect(() => {
     const getOrderApi = async () => {
@@ -138,10 +144,10 @@ export const OrderScreen = ({ route, navigation }) => {
             let o = json.order;
 
             if (o.id != '') {
+              
               setOrder(o);
               setLoading(false);
-              setStatus(o.status);
-              
+              setStatus(o.status);              
               
               //console.log(JSON.stringify(json.message));
               
@@ -159,7 +165,7 @@ export const OrderScreen = ({ route, navigation }) => {
                 });
                 setMarkOrigin({latitude: Number(o.o_lat), longitude: Number(o.o_lon)});
                 setMarkDes({latitude: Number(o.d_lat), longitude: Number(o.d_lon)});
-
+              
                 /*console.log({
                   c_lat: o.c_lat,
                   c_lon: o.c_lon,
@@ -181,15 +187,32 @@ export const OrderScreen = ({ route, navigation }) => {
     }
   }, []);
 
+  
+  const openMap = (lat, lng, label) => {
+    
+    const scheme = Platform.select({ ios: 'maps:0,0?q=', android: 'geo:0,0?q=' });
+    const latLng = `${lat},${lng}&z=14`;
+    const url = Platform.select({
+      ios: `${scheme}${label}@${latLng}`,
+      android: `${scheme}${latLng}(${label})`
+    });
+
+    Linking.openURL(url); 
+
+  }
+
 
   return (
+    
     <View style={myStyle.body}>
+      <PushToken />
+      <AccountSyncComponent />
       {isLoading ? (
         <Loading />
       ) : (
         order.status && (
         <ScrollView style={{flex:1, width:'100%'}}>
-          <PushToken />
+          
           <LinearGradient
             style={{ paddingVertical: 10, justifyContent: 'center' }}
             colors={["rgba(255, 255, 255, 1)", "rgba(211, 211, 211, 1)"]}>
@@ -205,8 +228,6 @@ export const OrderScreen = ({ route, navigation }) => {
 
               
           <View>
-          
-
             {order.branch_name && (
               <View style={styles.block}>
                 <Text style={styles.FontL}>{order.branch_name}</Text>
@@ -221,7 +242,7 @@ export const OrderScreen = ({ route, navigation }) => {
             )}
             {order.time && (
               <View style={styles.inlineblock}>
-                <View style={{flex:1}}><Text style={styles.FontGray}>TIME </Text></View>
+                <View style={{flex:1}}><Text style={styles.FontGray}>COLLECTION</Text></View>
                 <View style={{flex:2}}>
                   <Text style={styles.Font}>{order.time}
                     {order.scheduled &&
@@ -235,6 +256,12 @@ export const OrderScreen = ({ route, navigation }) => {
                     }
                   </Text>
                 </View>
+              </View>
+            )}
+            {order.time_to_delivery && (
+              <View style={styles.inlineblock}>
+                <View style={{flex:1}}><Text style={styles.FontGray}>DELIVERY</Text></View>
+                <View style={{flex:2}}><Text style={styles.Font}>{order.time_to_delivery}</Text></View>
               </View>
             )}
             {order.created && (
@@ -288,7 +315,16 @@ export const OrderScreen = ({ route, navigation }) => {
                     />ORIGIN 
                 </Text>
                 <Text style={styles.Font}>{order.origin}</Text>
-                
+                <Button
+                  title="PICKUP LOCATION"
+                  onPress={() => {
+                    openMap(
+                      markOrigin['latitude'],
+                      markOrigin['longitude'],
+                      'Pickup Location'
+                    )
+                  }}
+                />
               </View>
             )}
             {order.destination && (
@@ -297,9 +333,19 @@ export const OrderScreen = ({ route, navigation }) => {
                   <Image
                     style={{resizeMode: "contain"}}
                     source={require('../assets/images/des-24.png')}
-                      />DESTINATION
+                      />DESTINATION 
                 </Text>
                 <Text style={styles.Font}>{order.destination}</Text>
+                <Button
+                  title="DELIVERY LOCATION"
+                  onPress={() => {
+                    openMap(
+                      markDes['latitude'],
+                      markDes['longitude'],
+                      'Delivery Location'
+                    )
+                  }}
+                />
               </View>
             )}
                 
@@ -462,6 +508,8 @@ export const OrderScreen = ({ route, navigation }) => {
   )
 
 
+
+
 }
 
 export default OrderScreen;
@@ -513,7 +561,7 @@ const styles = StyleSheet.create({
   },
   mapStyle: {
     width: '100%',
-    height: 280,
+    height: 200,
     /*
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
