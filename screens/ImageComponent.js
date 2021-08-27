@@ -86,6 +86,11 @@ export const ImagePickLibrary = ({ store_target }) => {
 
 
     const pickImage = async () => {
+        
+        if (store_target == 'SET_POD2') {
+            store_target = 'SET_POD';
+        }
+
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
             //allowsEditing: true,

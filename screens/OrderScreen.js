@@ -22,7 +22,7 @@ export const OrderScreen = ({ route, navigation }) => {
   const [reported, setReported] = useState(false);
   const [declined, setDeclined] = useState(false);
   const [distance, setDistance] = useState(10);
-
+  const [pod, setPod] = useState(state.photoPod);
   const [latLink, setLatLink] = useState(1.5597964);
   const [lngLink, setLngLink] = useState(110.3110226);
 
@@ -60,6 +60,8 @@ export const OrderScreen = ({ route, navigation }) => {
           if (action == 'report') {
             setStatus('Accepted');
           } else if (action == 'accept') {
+
+            console.log(json.message);
             if (json.result) {
               setStatus('Accepted');
             } else{
@@ -382,9 +384,9 @@ export const OrderScreen = ({ route, navigation }) => {
                 <Text style={styles.Font}>{order.message}</Text>
               </View>
             )}
-            {order.pod !='-' && (
+            {order.pod != '-' && (
               <View style={{padding: 10, paddingTop: 40, width: '100%'}}>
-                    <Text style={[styles.Font, { textAlign: 'center' }]}>PROOF OF DELIVERY</Text>
+                    <Text style={[styles.Font, { textAlign: 'center' }]}>POD PHOTO CAMERA</Text>
                 <Image
                   style={{ resizeMode: "contain", width:'100%', height: 500 }}
                   source={{ uri: serverImageRoot+order.pod }} />
@@ -420,9 +422,19 @@ export const OrderScreen = ({ route, navigation }) => {
               )
             ) : status == 'Collected' ? (
               <View style={myStyle.inputBlock}>
+                        
                 <View style={{height: 20}}></View>
+                
+                <Text style={myStyle.label}>CAMERA PHOTO</Text>
                 <ImagePickLibrary style={myStyle.button} store_target='SET_POD' />
+                
                 <View style={{height: 20}}></View>
+                
+                <Text style={myStyle.label}>LIBRARY PHOTO</Text>
+                <ImagePickLibrary store_target='SET_POD2' />
+                
+                <View style={{height: 20}}></View>
+                        
                 {state.photoPod && (
                 <TouchableOpacity
                     style={[myStyle.button]}

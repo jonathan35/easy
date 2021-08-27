@@ -205,6 +205,7 @@ export const OrdersComponent = () => {
                                 <Text style={myStyle.FontGreenS}>  Assigned</Text>
                             )}
                         </Text>
+                        <Text style={myStyle.FontS}>{item.type}</Text>
                         <Text style={myStyle.FontS}>{item.date}</Text>
                     </View>
                     <View style={{flex:4}}>
@@ -260,6 +261,7 @@ export const OrdersComponent = () => {
                             {item.sid} 
                             <Text style={myStyle.FontGreenS}>   {item.status}</Text>
                         </Text>
+                        <Text style={myStyle.FontS}>{item.type}</Text>
                         <Text style={myStyle.FontS}>{item.date}</Text>
                     </View>
                     <View style={{flex:4, }}>
@@ -314,6 +316,7 @@ export const OrdersComponent = () => {
                             {item.sid} 
                             <Text style={myStyle.FontGreenS}>   {item.status}</Text>
                         </Text>
+                        <Text style={myStyle.FontS}>{item.type}</Text>
                         <Text style={myStyle.FontS}>{item.date}</Text>
                     </View>
                     <View style={{ flex: 4, }}>
