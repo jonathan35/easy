@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "easy move and pick",
+    "name": "easy",
     "slug": "easy",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -27,8 +27,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.easymovenpick.app",
-      "versionCode": 2,
+      "package": "com.quest.easydelivery",
       "googleServicesFile": "./google-services.json",
       "config": {
         "googleMaps": {

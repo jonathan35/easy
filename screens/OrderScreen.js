@@ -199,10 +199,19 @@ export const OrderScreen = ({ route, navigation }) => {
       android: `${scheme}${latLng}(${label})`
     });
 
-    Linking.openURL(url); 
-
+    Linking.openURL(url);
   }
+  
+  const openCall = async (p) => {
+    Linking.openURL('tel:${'+p+'}');
+  };
 
+  const openWhatsappCall = async (p) => {
+    if (p.charAt(0) != 6) {
+      p = '6' + p;
+    }
+    Linking.openURL('https://wa.me/'+p);
+  };
 
   return (
     
@@ -287,7 +296,19 @@ export const OrderScreen = ({ route, navigation }) => {
             {order.phone && (
               <View style={styles.inlineblock}>
                 <View style={{flex:1}}><Text style={styles.FontGray}>PHONE </Text></View>
-                <View style={{flex:2}}><Text style={styles.Font}>{order.phone}</Text></View>
+                <View style={{flex:2}}>
+                      
+                      <TouchableOpacity onPress={() => {
+                          openCall(order.phone)
+                      }}>
+                        <Text style={styles.Font}>{order.phone}</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity onPress={() => {
+                          openWhatsappCall(order.phone)
+                      }}>
+                        <Text style={[styles.Font, {color:'green'}]}>Whatsapp</Text>
+                      </TouchableOpacity>
+                </View>
               </View>
             )}
             {order.distance && (
@@ -448,14 +469,14 @@ export const OrderScreen = ({ route, navigation }) => {
             )}
 
 
-            {status == 'Accepted' && (
+            {/*status == 'Accepted' && (
                 <View style={myStyle.inputBlock}>
                   <TouchableOpacity
                     style={myStyle.button}
                     onPress={() => {updateOrderApi('collect')}}
                   ><Text style={myStyle.buttonText}>COLLECTED (Temporary)</Text></TouchableOpacity>
                 </View>
-            )/* */}
+            ) */}
             
                 
             
